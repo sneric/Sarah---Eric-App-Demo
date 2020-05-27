@@ -16,11 +16,18 @@ class ToDoListTableViewController: UITableViewController {
     //iteration 2
     var toDos : [ToDoCD] = []
     
+    //arrays for different sections- lesson plans, admin tasks, parent communication, misc.
+    var toDosLP : [ToDoCD] = []
+    var toDosAT : [ToDoCD] = []
+    var toDosPC : [ToDoCD] = []
+    var toDosM : [ToDoCD] = []
+    
     func getToDos() {
         if let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext {
             
             if let coreDataToDos = try?context.fetch(ToDoCD.fetchRequest()) as? [ToDoCD] {
-                toDos = coreDataToDos
+                //I've been trying to figure out what goes here now that there are multiple arrays containing tasks
+                toDosLP = coreDataToDos
                 tableView.reloadData()
             }
         }
@@ -59,15 +66,20 @@ class ToDoListTableViewController: UITableViewController {
    */
     
  // iteration 1
+    //new func like this below for different sections
+    /*
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return toDos.count
     }
+ */
 
 // iteration 1
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
         
+        /*
         let toDo = toDos[indexPath.row]
         
         //iteration 2
@@ -78,9 +90,22 @@ class ToDoListTableViewController: UITableViewController {
             cell.textLabel?.text = toDo.name
         }
         }
+        */
         
-
-        return cell
+        //with sections
+        var toDo = toDosLP[indexPath.row]
+        if indexPath.section == 1{
+            toDo = toDosAT[indexPath.row]
+        }
+        else if indexPath.section == 2{
+            toDo = toDosPC[indexPath.row]
+        }
+        else if indexPath.section == 3{
+            toDo = toDosM[indexPath.row]
+        }
+        
+        cell.textLabel?.text = toDo.name
+            return cell
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -143,11 +168,36 @@ class ToDoListTableViewController: UITableViewController {
     
     // iteration 1
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        /*
         let toDo = toDos[indexPath.row]
+        */
+        var toDo = toDosLP[indexPath.row]
+        if indexPath.section == 1{
+            toDo = toDosAT[indexPath.row]
+        }
+        else if indexPath.section == 2{
+            toDo = toDosPC[indexPath.row]
+        }
+        else if indexPath.section == 3{
+            toDo = toDosM[indexPath.row]
+        }
         
         performSegue(withIdentifier: "moveToComplete", sender: toDo)
     }
+    
+    //row count with sections and arrays for each section
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0{
+            return toDosLP.count
+        }
+        else if section == 1{
+            return toDosAT.count
+        }
+        else if section == 2{
+            return toDosPC.count
+        }
+        return toDosM.count
+        }
     
     // add sections
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -159,6 +209,6 @@ class ToDoListTableViewController: UITableViewController {
         let headers = ["Lesson Planning","Administrative Tasks","Parent Communication","Miscellaneous"]
         return headers[section]
     }
-
+        
 
 }

@@ -15,6 +15,8 @@ class AddToDOViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
  // iteration 1
     @IBOutlet weak var importantSwitch: UISwitch!
+// user selects section for this task
+    @IBOutlet weak var category: UISegmentedControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +53,8 @@ class AddToDOViewController: UIViewController {
                 // this .name and .important came from the attributes you typed in on the Core Data page!
                 toDo.name = titleText
                 toDo.important = importantSwitch.isOn
+                //saves the category input by the user
+                toDo.section = Int16(category.selectedSegmentIndex)
             }
             
             try? context.save()

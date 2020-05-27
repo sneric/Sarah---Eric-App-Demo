@@ -14,4 +14,5 @@ import UIKit
 class ToDo{
     var name = ""
     var important = false
+    var section = 0
 }
