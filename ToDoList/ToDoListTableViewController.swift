@@ -149,15 +149,15 @@ class ToDoListTableViewController: UITableViewController {
         performSegue(withIdentifier: "moveToComplete", sender: toDo)
     }
     
-    // add sections and section titles
+    // add sections
     override func numberOfSections(in tableView: UITableView) -> Int {
             return 4
         }
     
+    // add section headers
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let headers = ["Lesson Planning","Administrative Tasks","Parent Communication","Miscellaneous"]
         return headers[section]
-        
     }
 
 
